@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,12 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.database.sqlite.SQLiteDatabase;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    TodoItemDatabase DB ;
     private ArrayList<String> items;
     private ArrayAdapter<String> itemsAdapter;
     private ListView lvItems;
@@ -34,12 +37,13 @@ public class MainActivity extends AppCompatActivity {
         lvItems = (ListView) findViewById(R.id.lvItems);
         items  = new ArrayList<>();
         btnAddItem = findViewById(R.id.btnAddItem);
+        DB = new TodoItemDatabase(this);
         readItems();
         itemsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
                 items);
         lvItems.setAdapter(itemsAdapter);
-        launchComposeView();
+        setupItemClickListener();
         setupListViewListener();
     }
 
@@ -66,16 +70,17 @@ public class MainActivity extends AppCompatActivity {
          writeItems();
      }
 
-     private void readItems(){
-         File filesDir = getFilesDir();
-         File todoFile = new File(filesDir, "todo.txt");
+    private void readItems(){
+        File filesDir = getFilesDir();
+        File todoFile = new File(filesDir, "todo.txt");
 
-         try {
-             items = new ArrayList<String>(FileUtils.readLines(todoFile));
-         } catch (IOException e) {
-             items = new ArrayList<String>();
-         }
-     }
+        try {
+            items = new ArrayList<String>(FileUtils.readLines(todoFile));
+        } catch (IOException e) {
+            items = new ArrayList<String>();
+        }
+
+    }
 
      private void writeItems() {
         File filesDir = getFilesDir();
@@ -87,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         }
      }
 
-     public void launchComposeView(){
+     public void setupItemClickListener(){
          Intent i = new Intent(MainActivity.this, EditItemActivity.class);
          lvItems.setOnItemClickListener(
                  new AdapterView.OnItemClickListener() {
@@ -100,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
                      }
                  }
          );
-         //startActivityForResult(i, REQUEST_CODE);
      }
 
 
