@@ -22,11 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    TodoItemDatabase DB ;
     private ArrayList<String> items;
     private ArrayAdapter<String> itemsAdapter;
     private ListView lvItems;
-    private Button btnAddItem;
     private final int REQUEST_CODE = 20;
     private final int RESULT_OK = 25 ;
 
@@ -36,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         lvItems = (ListView) findViewById(R.id.lvItems);
         items  = new ArrayList<>();
-        btnAddItem = findViewById(R.id.btnAddItem);
-        DB = new TodoItemDatabase(this);
         readItems();
         itemsAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1,
